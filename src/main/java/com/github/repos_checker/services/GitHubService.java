@@ -43,9 +43,11 @@ public class GitHubService {
             for (int i = 0; i < reposArray.size(); i++) {
                 JsonObject repoObject = reposArray.get(i).getAsJsonObject();
                 if (!repoObject.get("fork").getAsBoolean()) {
-                    GitHubRepository repository = new GitHubRepository();
-                    repository.setName(repoObject.get("name").getAsString());
-                    repository.setOwnerLogin(repoObject.get("owner").getAsJsonObject().get("login").getAsString());
+                    GitHubRepository repository = GitHubRepository.builder()
+                            .name(repoObject.get("name").getAsString())
+                            .ownerLogin(repoObject.get("owner").getAsJsonObject().get("login").getAsString())
+                            .build();
+
 
                     String branchesResponse = webClient.get()
                             .uri("/repos/{owner}/{repo}/branches", repository.getOwnerLogin(), repository.getName())
@@ -58,9 +60,10 @@ public class GitHubService {
 
                     for (int j = 0; j < branchesArray.size(); j++) {
                         JsonObject branchObject = branchesArray.get(j).getAsJsonObject();
-                        GitHubBranch branch = new GitHubBranch();
-                        branch.setName(branchObject.get("name").getAsString());
-                        branch.setLastCommitSha(branchObject.get("commit").getAsJsonObject().get("sha").getAsString());
+                        GitHubBranch branch = GitHubBranch.builder()
+                                .name(branchObject.get("name").getAsString())
+                                .lastCommitSha(branchObject.get("commit").getAsJsonObject().get("sha").getAsString())
+                                .build();
                         branches.add(branch);
                     }
 
