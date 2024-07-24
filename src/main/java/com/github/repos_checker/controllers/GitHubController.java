@@ -24,7 +24,7 @@ public class GitHubController {
     @GetMapping(value = "/user/{username}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<GitHubRepository> getUserRepositories(@PathVariable String username, @RequestHeader("Accept") String acceptHeader) {
-        if (!"application/json".equals(acceptHeader)) {
+        if (!MediaType.APPLICATION_JSON_VALUE.equals(acceptHeader)) {
             logger.info("Received request without proper Accept header");
             throw new UnsupportedMediaTypeException("Only application/json is supported");
         } else {
